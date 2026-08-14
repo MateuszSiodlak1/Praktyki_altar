@@ -1,10 +1,10 @@
-# Bazy wektorowe Qdrant i lokalne pliki indeksów
+
 **/qdrant_db/
 **/qdrant_db_wo_pdf/
 **/.lock
 **/meta.json
 
-# Pliki środowiska i konfiguracji (tajne klucze API)
+# Pliki środowiska i konfiguracji
 .env
 .venv/
 venv/
