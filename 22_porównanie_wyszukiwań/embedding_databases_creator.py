@@ -53,3 +53,13 @@ def is_in_allowed_subfolder(path_str: str) -> bool:
     normalized_path = path_str.replace("\\", "/").lower()
     path_parts = set(normalized_path.split("/"))
     return not ALLOWED_SUBFOLDERS.isdisjoint(path_parts)
+
+json_path = r"C:\Users\mateu\Desktop\Praktyki_altar\21_Test_mistralAI\descriptions.json"
+
+with open(json_path, "r", encoding="utf-8") as f:
+    dataset = json.load(f)
+
+points_vis = []
+points_txt = []
+points_hyb = []
+point_id = 0
