@@ -96,3 +96,10 @@ for item in dataset:
     points_vis.append(PointStruct(id=point_id, vector=v_vis.tolist(), payload=payload))
     points_txt.append(PointStruct(id=point_id, vector=v_txt.tolist(), payload=payload))
     points_hyb.append(PointStruct(id=point_id, vector=v_hyb.tolist(), payload=payload))
+    point_id += 1
+
+client.upsert(collection_name=COLLECTIONS["visual"], points=points_vis)
+client.upsert(collection_name=COLLECTIONS["text_desc"], points=points_txt)
+client.upsert(collection_name=COLLECTIONS["hybrid"], points=points_hyb)
+
+print(f"Zakończono tworzenie baz danych Qdrant dla {point_id} punktów.")
