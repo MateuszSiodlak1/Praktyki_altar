@@ -46,3 +46,10 @@ def encode_text(text: str) -> np.ndarray:
         feats = model.encode_text(tokens)
         feats /= feats.norm(dim=-1, keepdim=True)
     return feats.squeeze(0).cpu().numpy()
+
+ALLOWED_SUBFOLDERS = {"charts", "photos", "app_screenshots"}
+
+def is_in_allowed_subfolder(path_str: str) -> bool:
+    normalized_path = path_str.replace("\\", "/").lower()
+    path_parts = set(normalized_path.split("/"))
+    return not ALLOWED_SUBFOLDERS.isdisjoint(path_parts)
