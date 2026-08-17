@@ -79,3 +79,20 @@ for item in dataset:
     keywords = ", ".join(analysis.get("keywords", []))
 
     text_to_embed = f"Typ: {img_type}. Opis: {summary}. Tekst na obrazie: {visible_text}. Słowa kluczowe: {keywords}."
+
+    v_vis = encode_image(full_path)
+    
+    v_txt = encode_text(text_to_embed)
+    
+    v_hyb_raw = v_vis + v_txt
+    v_hyb = v_hyb_raw / np.linalg.norm(v_hyb_raw)
+
+    payload = {
+        "file_name": file_name,
+        "full_path": full_path,
+        "type": img_type,
+        "summary": summary
+    }
+    points_vis.append(PointStruct(id=point_id, vector=v_vis.tolist(), payload=payload))
+    points_txt.append(PointStruct(id=point_id, vector=v_txt.tolist(), payload=payload))
+    points_hyb.append(PointStruct(id=point_id, vector=v_hyb.tolist(), payload=payload))
