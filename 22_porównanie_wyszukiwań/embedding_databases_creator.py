@@ -39,3 +39,10 @@ def encode_image(img_path: str) -> np.ndarray:
         feats = model.encode_image(tensor)
         feats /= feats.norm(dim=-1, keepdim=True)
     return feats.squeeze(0).cpu().numpy()
+
+def encode_text(text: str) -> np.ndarray:
+    tokens = tokenizer([text]).to(device)
+    with torch.no_grad():
+        feats = model.encode_text(tokens)
+        feats /= feats.norm(dim=-1, keepdim=True)
+    return feats.squeeze(0).cpu().numpy()
