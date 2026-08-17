@@ -15,3 +15,18 @@ model, _, preprocess = open_clip.create_model_and_transforms(model_name, pretrai
 model = model.to(device)
 model.eval()
 tokenizer = open_clip.get_tokenizer(model_name)
+
+client = QdrantClient(path="./qdrant_db")
+VECTOR_SIZE = 512
+
+COLLECTIONS = {
+    "visual": "variant_1_visual",
+    "text_desc": "variant_2_text_desc",
+    "hybrid": "variant_3_hybrid"
+}
+
+for coll_name in COLLECTIONS.values():
+    client.recreate_collection(
+        collection_name=coll_name,
+        vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE)
+    )
