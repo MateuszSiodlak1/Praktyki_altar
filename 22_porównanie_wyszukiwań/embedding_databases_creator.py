@@ -30,3 +30,12 @@ for coll_name in COLLECTIONS.values():
         collection_name=coll_name,
         vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE)
     )
+
+def encode_image(img_path: str) -> np.ndarray:
+    """Generuje znormalizowany wektor cech wizualnych z obrazu."""
+    image = Image.open(img_path).convert("RGB")
+    tensor = preprocess(image).unsqueeze(0).to(device)
+    with torch.no_grad():
+        feats = model.encode_image(tensor)
+        feats /= feats.norm(dim=-1, keepdim=True)
+    return feats.squeeze(0).cpu().numpy()
