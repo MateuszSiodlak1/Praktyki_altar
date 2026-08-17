@@ -63,3 +63,19 @@ points_vis = []
 points_txt = []
 points_hyb = []
 point_id = 0
+
+for item in dataset:
+    full_path = item.get("full_path", "")
+    
+    if not is_in_allowed_subfolder(full_path):
+        continue
+
+    file_name = item.get("file_name", "")
+    analysis = item.get("analysis", {})
+
+    img_type = analysis.get("type", "")
+    summary = analysis.get("summary", "")
+    visible_text = ", ".join(analysis.get("visibleText", []))
+    keywords = ", ".join(analysis.get("keywords", []))
+
+    text_to_embed = f"Typ: {img_type}. Opis: {summary}. Tekst na obrazie: {visible_text}. Słowa kluczowe: {keywords}."
