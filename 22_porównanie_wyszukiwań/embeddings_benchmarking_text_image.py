@@ -47,7 +47,7 @@ def open_image(file_path: str):
             subprocess.run(["xdg-open", file_path])
     except Exception as e:
         print(f"[BŁĄD przy otwieraniu obrazu]: {e}")
-        def main():
+def main():
     print("\n" + "=" * 70)
     print(" Wpisz prompt i naciśnij Enter.")
     print(" Wpisz 'q', 'exit' lub 'quit', aby zakończyć działanie.")
@@ -68,3 +68,47 @@ def open_image(file_path: str):
         if query.lower() in ["q", "exit", "quit"]:
             print("Zakończono działanie programu.")
             break
+        query_vector = encode_query(query)
+
+        print("\n" + "=" * 80)
+        print(f" WYNIKI DLA ZAPYTANIA: '{query}'")
+        print("=" * 80)
+
+        best_overall_score = -1.0
+        best_overall_file_path = None
+        best_overall_variant = ""
+
+        for var_name, coll_name in COLLECTIONS.items():
+            print(f"\n--- Wariant: {var_name} ---")
+            
+            res = client.query_points(
+                collection_name=coll_name,
+                query=query_vector,
+                limit=TOP_K
+            )
+
+            if not res.points:
+                print("  Brak wyników w bazie.")
+                continue
+
+            for rank, point in enumerate(res.points, 1):
+                file_name = point.payload.get("file_name", "Brak nazwy")
+                full_path = point.payload.get("full_path", "")
+                img_type = point.payload.get("type", "nieznany")
+                score = point.score * 100
+                
+                print(f"  {rank}. Plik: {file_name:<18} | Kategoria: {img_type:<12} | Dopasowanie: {score:.2f}%")
+
+                if score > best_overall_score:
+                    best_overall_score = score
+                    best_overall_file_path = full_path
+                    best_overall_variant = var_name
+
+        if best_overall_file_path:
+            print("\n" + "-" * 80)
+            print(f" NAJLEPSZE DOPASOWANIE OGÓŁEM:")
+            print(f" Wariant: {best_overall_variant} | Score: {best_overall_score:.2f}%")
+            open_image(best_overall_file_path)
+
+if __name__ == "__main__":
+    main()
