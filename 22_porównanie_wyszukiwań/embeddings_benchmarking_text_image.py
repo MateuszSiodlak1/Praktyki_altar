@@ -24,3 +24,26 @@ COLLECTIONS = {
     "2. Opis (Mistral)": "variant_2_text_desc",
     "3. Hybrydowy": "variant_3_hybrid"
 }
+def encode_query(query_text: str) -> list[float]:
+    tokens = tokenizer([query_text]).to(device)
+    with torch.no_grad():
+        feats = model.encode_text(tokens)
+        feats /= feats.norm(dim=-1, keepdim=True)
+    return feats.squeeze(0).cpu().numpy().tolist()
+
+def open_image(file_path: str):
+    if not file_path or not os.path.exists(file_path):
+        print(f"\n[BŁĄD] Nie można otworzyć pliku (ścieżka nie istnieje): {file_path}")
+        return
+
+    sys_name = platform.system()
+    try:
+        print(f"\n Otwieranie pliku: {file_path} ...")
+        if sys_name == "Windows":
+            os.startfile(file_path)
+        elif sys_name == "Darwin":  # macOS
+            subprocess.run(["open", file_path])
+        else:  # Linux
+            subprocess.run(["xdg-open", file_path])
+    except Exception as e:
+        print(f"[BŁĄD przy otwieraniu obrazu]: {e}")
