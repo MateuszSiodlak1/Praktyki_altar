@@ -16,3 +16,11 @@ model, _, _ = open_clip.create_model_and_transforms(
 model = model.to(device)
 model.eval()
 tokenizer = open_clip.get_tokenizer(model_name)
+
+client = QdrantClient(path="./qdrant_db")
+
+COLLECTIONS = {
+    "1. Wizualny": "variant_1_visual",
+    "2. Opis (Mistral)": "variant_2_text_desc",
+    "3. Hybrydowy": "variant_3_hybrid"
+}
