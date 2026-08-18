@@ -47,3 +47,24 @@ def open_image(file_path: str):
             subprocess.run(["xdg-open", file_path])
     except Exception as e:
         print(f"[BŁĄD przy otwieraniu obrazu]: {e}")
+        def main():
+    print("\n" + "=" * 70)
+    print(" Wpisz prompt i naciśnij Enter.")
+    print(" Wpisz 'q', 'exit' lub 'quit', aby zakończyć działanie.")
+    print("=" * 70)
+
+    TOP_K = 3 
+
+    while True:
+        try:
+            query = input("\nWprowadź prompt: ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print("\nZakończono działanie.")
+            break
+
+        if not query:
+            continue
+
+        if query.lower() in ["q", "exit", "quit"]:
+            print("Zakończono działanie programu.")
+            break
